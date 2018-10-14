@@ -6,6 +6,3 @@ To test the main program go to the root directory and issue the following maven 
   
 The Junit test can be invoked using following maven command
   mvn test
-  
- 
-  

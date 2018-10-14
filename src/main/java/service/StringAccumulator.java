@@ -92,30 +92,30 @@ public class StringAccumulator {
 		Splitter.on(delimiter)
 				.omitEmptyStrings()
 				.splitToList(integerString)
-				.forEach(
-						s -> {
-							{
-								try {
-									int n = Integer.parseInt(s);
-									if (n < 0) {
-										/*
-										 * throw new RuntimeException(
-										 * "Negatives are not allowed");
-										 */
-										negativeNumbers.add(n);
-									}
-									if (n <= 1000) {
-										sum.addAndGet(n);
-									}
-								} catch (NumberFormatException nm) {
-									Queue<String> localQueue = new LinkedList<>(
-											delimiterQueue);
-									sum.addAndGet(add(s, localQueue,
-											negativeNumbers).get(0));
+				   .forEach(
+                        s ->
+                        {
+                            if (s.matches("-?(0|[1-9]\\d*)")) {
+                                int n = Integer.parseInt(s);
+                                if (n < 0) {
+                                    /*
+                                     * throw new NegativeNumberNotAllowedExeption(
+                                     * "Negatives not allowed " + result);
+                                     */
+                                    negativeNumbers.add(n);
+                                }
+                                if (n <= 1000) {
+                                    sum.addAndGet(n);
+                                }
+                            } else {
+                                //this is required because the same queue should be passed to all the substring
+                                // in case the first substring processing removes the item it should not impact other substrings
+                                Queue<String> localQueue = new LinkedList<>(delimiterQueue);
+                                sum.addAndGet(add(s, localQueue,
+                                        negativeNumbers).get(0));
 
-								}
-							}
-						});
+                            }
+                        });
 		if (negativeNumbers.size() > 0) {
 			result = negativeNumbers;
 		} else {
